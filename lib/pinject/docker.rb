@@ -125,6 +125,10 @@ module Pinject
         elif [ -f /etc/alpine-release ]; then
             OS=alpine
             VER=`cat /etc/alpine-release | awk -F. '{ print $1 }'`
+        elif [ -f /etc/os-release]; then
+            . /etc/os-release
+            OS=$ID
+            VER=`echo $VERSION_ID | sed -e 's/"//g'`
         else
             OS="other"
             VER="unknown"
