@@ -1,4 +1,5 @@
 #!/usr/bi/env ruby
+# frozen_string_literal: true
 
 require 'pinject'
 
