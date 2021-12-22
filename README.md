@@ -22,7 +22,18 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+you can inject os update command to some docker images.
+
+```ruby
+image = Pinject.new("ubuntu:latest")
+inject_image = image.inject_build("pyama:ubuntu_inject") # run apt-get upgrade
+inject_image.push
+```
+
+## Support Dist
+- ubuntu
+- centos
+- alpine
 
 ## Development
 
