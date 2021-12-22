@@ -3,6 +3,7 @@
 require_relative "pinject/version"
 require_relative "pinject/docker"
 require "logger"
+
 module Pinject
   def self.log
     @log ||= Logger.new(STDOUT)
