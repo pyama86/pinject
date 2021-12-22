@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    pinject (0.1.4)
+    pinject (0.1.5)
       docker-api
 
 GEM
