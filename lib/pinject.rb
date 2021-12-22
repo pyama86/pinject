@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "pinject/version"
+require_relative 'pinject/version'
 
 module Pinject
   class Error < StandardError; end
