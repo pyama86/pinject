@@ -1,0 +1,5 @@
+#!/usr/bi/env ruby
+
+require 'pinject'
+
+Pinject.new(ARGV[0]).inject_build
