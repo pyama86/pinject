@@ -7,11 +7,13 @@ module Pinject
   class Docker
     attr_reader :log
 
-    ::Docker.authenticate!(
-      'username' => ENV['DOCKER_USER'],
-      'password' => ENV['DOCKER_PASSWORD'],
-      'serveraddress' => ENV['DOCKER_REGISTRY']
-    ) if %w(DOCKER_USER DOCKER_PASSWORD DOCKER_REGISTRY).all? {|a| ENV[a] }
+    if %w[DOCKER_USER DOCKER_PASSWORD DOCKER_REGISTRY].all? { |a| ENV[a] }
+      ::Docker.authenticate!(
+        'username' => ENV['DOCKER_USER'],
+        'password' => ENV['DOCKER_PASSWORD'],
+        'serveraddress' => ENV['DOCKER_REGISTRY']
+      )
+    end
 
     def initialize(image_name, log: false)
       @image_name = image_name
