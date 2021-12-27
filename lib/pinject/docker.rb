@@ -51,9 +51,8 @@ module Pinject
                                              })
 
       result = nil
-      t = Thread.new { container.attach { |stream, chunk| result = chunk.chomp if stream == :stdout } }
       container.start
-      t.join
+      container.streaming_logs(stdout: true) { |stream, chunk| result = chunk.chomp if stream == :stdout }
 
       if result
         dist, version, user = result.split(%r{:|/})
