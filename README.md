@@ -23,7 +23,7 @@ Or install it yourself as:
 you can inject os update command to some docker images.
 
 ```ruby
-image = Pinject.new("ubuntu:latest")
+image = Pinject::Docker.new("ubuntu:latest")
 inject_image = image.inject_build("pyama:ubuntu_inject") # run apt-get upgrade
 inject_image.push
 ```
