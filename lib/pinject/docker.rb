@@ -105,6 +105,13 @@ module Pinject
             ['apt-get update -qqy', 'apt-get upgrade -qqy', 'apt-get clean', 'rm -rf /var/lib/apt/lists/*']
           when 'alpine'
             ['apk update', 'apk upgrade --no-cache']
+          when 'oracle'
+            case version
+            when '7'
+              ['yum update -y']
+            when '8'
+              ['microdnf update -y']
+            end
           when 'centos'
             case version
             when '5', '6'
@@ -126,6 +133,9 @@ module Pinject
         elif [ -f /etc/debian_version ]; then
             OS=debian
             VER=`cat /etc/debian_version | awk -F. '{ print $1 }'`
+        elif [ -f /etc/oracle-release ]; then
+            OS=oracle
+            VER=`cat /etc/oracle-release | sed -e 's/.*\\s\\([0-9]\\)\\..*/\\1/'`
         elif [ -f /etc/redhat-release ]; then
             OS=centos
             VER=`cat /etc/redhat-release | sed -e 's/.*\\s\\([0-9]\\)\\..*/\\1/'`
