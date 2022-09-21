@@ -57,10 +57,14 @@ module Pinject
                                              })
 
       result = nil
-      container.start
-      container.streaming_logs(stdout: true) { |stream, chunk| result = chunk.chomp if stream == :stdout }
+      err_result = nil
+      container.run('/opt/detector')
+      container.streaming_logs(stdout: true, stderr: true) do |stream, chunk|
+        result = chunk.chomp if stream == :stdout
+        err_result = chunk.chomp if stream == :stderr
+      end
 
-      Pinject.log.info "detect #{container_name} result #{result.inspect}"
+      Pinject.log.info "detect #{container_name} result:#{result.inspect} err:#{err_result.inspect}"
       if result
         dist, version, user = result.split(%r{:|/})
 
