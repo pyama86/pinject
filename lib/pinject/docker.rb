@@ -21,7 +21,8 @@ module Pinject
     end
 
     def inject_build(repo)
-      if r = detect_os
+      r = detect_os
+      if r
         Pinject.log.info "detect os #{r.inspect}" if log
         upd = update_cmd(r[:dist], r[:version])
         if upd
@@ -36,6 +37,8 @@ module Pinject
         else
           raise UnsupportedDistError, "unsupport os dist:#{r[:dist]} version:#{r[:version]}"
         end
+      else
+        raise UnsupportedDistError, "can't detect os"
       end
     end
 
@@ -57,6 +60,7 @@ module Pinject
       container.start
       container.streaming_logs(stdout: true) { |stream, chunk| result = chunk.chomp if stream == :stdout }
 
+      Pinject.log.info "detect #{container_name} result #{result.inspect}"
       if result
         dist, version, user = result.split(%r{:|/})
 
