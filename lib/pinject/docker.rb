@@ -29,7 +29,7 @@ module Pinject
           ::Docker::Image.build(
             df,
             't' => repo,
-            'no-cache' => true
+            'nocache' => true
           ) do |v|
             Pinject.log.info v if log
           end
