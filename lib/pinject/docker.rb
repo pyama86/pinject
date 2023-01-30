@@ -21,7 +21,8 @@ module Pinject
     end
 
     def inject_build(repo)
-      if r = detect_os
+      r = detect_os
+      if r
         Pinject.log.info "detect os #{r.inspect}" if log
         upd = update_cmd(r[:dist], r[:version])
         if upd
@@ -29,13 +30,16 @@ module Pinject
           ::Docker::Image.build(
             df,
             't' => repo,
-            'rm' => true
+            'rm' => true,
+            'nocache' => true
           ) do |v|
             Pinject.log.info v if log
           end
         else
           raise UnsupportedDistError, "unsupport os dist:#{r[:dist]} version:#{r[:version]}"
         end
+      else
+        raise UnsupportedDistError, "can't detect os"
       end
     end
 
@@ -54,9 +58,14 @@ module Pinject
                                              })
 
       result = nil
-      container.start
-      container.streaming_logs(stdout: true) { |stream, chunk| result = chunk.chomp if stream == :stdout }
+      err_result = nil
+      container.run('/opt/detector')
+      container.streaming_logs(stdout: true, stderr: true) do |stream, chunk|
+        result = chunk.chomp if stream == :stdout
+        err_result = chunk.chomp if stream == :stderr
+      end
 
+      Pinject.log.info "detect #{container_name} result:#{result.inspect} err:#{err_result.inspect}"
       if result
         dist, version, user = result.split(%r{:|/})
 
