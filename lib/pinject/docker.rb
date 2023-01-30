@@ -28,7 +28,8 @@ module Pinject
           df = docker_file(@image_name, upd, r[:user])
           ::Docker::Image.build(
             df,
-            't' => repo
+            't' => repo,
+            'rm' => true
           ) do |v|
             Pinject.log.info v if log
           end
